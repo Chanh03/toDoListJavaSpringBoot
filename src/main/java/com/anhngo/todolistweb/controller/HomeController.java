@@ -7,7 +7,6 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,9 +33,11 @@ public class HomeController {
         this.toDoList = toDoList;
     }
 
-    @GetMapping({"/", "/index"})
+    @RequestMapping({"/", "/index"})
     public String home(Model model) {
+        ToDoListEntity toDo = new ToDoListEntity();
         model.addAttribute("toDoList", toDoList);
+        model.addAttribute("editToDo", toDo);
         return "index";
     }
 
@@ -60,7 +61,7 @@ public class HomeController {
         return "redirect:/";
     }
 
-    @GetMapping("/search")
+    @RequestMapping("/search")
     public String search(@RequestParam(name = "search") String search, Model model) {
         List<ToDoListEntity> filteredList = toDoList.stream()
                 .filter(item -> item.getTask().toLowerCase().contains(search.toLowerCase()))
@@ -100,14 +101,28 @@ public class HomeController {
         });
         return "redirect:/";
     }
-
-    @GetMapping("/edit/{id}")
-    public String edit(@PathVariable(name = "id") int id, Model model) {
-        ToDoListEntity toDo = toDoList.stream()
-                .filter(item -> item.getId() == id)
-                .findFirst()
-                .orElse(null);
-        model.addAttribute("toDo", toDo);
-        return "edit";
-    }
+//
+//    @RequestMapping("/edit/{id}")
+//    public String edit(@PathVariable(name = "id") int id, Model model) {
+//        ToDoListEntity toDo = toDoList.stream()
+//                .filter(item -> item.getId() == id)
+//                .findFirst()
+//                .orElse(null);
+//        model.addAttribute("editToDo", toDo);
+//        model.addAttribute("toDoList", toDoList);
+//        return "index";
+//    }
+//
+//    @RequestMapping("/update")
+//    public String update(@RequestParam(name = "id") int id,
+//                         @RequestParam(name = "name") String name,
+//                         @RequestParam(name = "done", defaultValue = "false") boolean done) {
+//        toDoList.forEach(item -> {
+//            if (item.getId() == id) {
+//                item.setTask(name);
+//                item.setCompleted(done);
+//            }
+//        });
+//        return "redirect:/";
+//    }
 }
