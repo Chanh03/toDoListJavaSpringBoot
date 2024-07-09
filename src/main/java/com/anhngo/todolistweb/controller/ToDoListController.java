@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
-public class HomeController {
+public class ToDoListController {
     private List<ToDoListEntity> toDoList = new ArrayList<>();
 
     @Autowired
@@ -38,7 +38,7 @@ public class HomeController {
         ToDoListEntity toDo = new ToDoListEntity();
         model.addAttribute("toDoList", toDoList);
         model.addAttribute("editToDo", toDo);
-        return "index";
+        return "todo";
     }
 
     @RequestMapping("/add")
@@ -67,7 +67,7 @@ public class HomeController {
                 .filter(item -> item.getTask().toLowerCase().contains(search.toLowerCase()))
                 .collect(Collectors.toList());
         model.addAttribute("toDoList", filteredList);
-        return "index";
+        return "todo";
     }
 
     @RequestMapping("/doneAll")
